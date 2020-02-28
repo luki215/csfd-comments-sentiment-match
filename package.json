@@ -1,0 +1,23 @@
+{
+  "name": "csfd-scraper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start:crawl": "ts-node-dev --respawn --transpileOnly ./app/crawl.ts",
+    "start:sentiment": "ts-node-dev --respawn --transpileOnly ./app/sentiment.ts",
+    "prod": "tsc && node ./build/app.js"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.8.2"
+  },
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/cheerio": "^0.22.16",
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "fast-csv": "^4.1.1",
+    "sentiment": "^5.0.2"
+  }
+}
