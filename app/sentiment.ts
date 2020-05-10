@@ -37,11 +37,20 @@ function analyse(comments: Comment[], csAffin) {
     sentiment.registerLanguage('cs', {labels});
 
     var match = 0;
-    var matchNot3 = 0;
-    var diffSum = 0
+    var matchNot = 0;
+    var diffSum = 0;
+
+    const csvStream = csv.format({ headers: true });
+    var writeStream = fs.createWriteStream("outputfile.csv");
+    csvStream.pipe(writeStream).on('end', process.exit);
+
     comments.forEach(comment => {
         // result is from -1 to 1
         var result = sentiment.analyze(comment.comment, { language: 'cs' }).comparative;
+        // string with emojis can overflow 1/-1
+        if(result > 1) result = 1;
+        if(result < -1) result = -1;
+
         // from 0 to 2
         result +=1;
         //from 0 to 5
@@ -49,16 +58,16 @@ function analyse(comments: Comment[], csAffin) {
         result = Math.round(result);
         const diff = Math.abs(comment.rating - result);
         if(result === comment.rating) match++;
-        if(result === comment.rating && result !== 3) matchNot3++;
+        if(result !== comment.rating) matchNot++;
         diffSum+= diff;
-        if(diff === 3) {
-            console.log(comment.comment);
-            console.dir(`${diff}, result: ${result}, rating: ${comment.rating}`);
-        }
+        
+        csvStream.write({ predicted: result, actual: comment.rating, diff: diff, comment: comment.comment });
+
        // console.dir(`${diff}, ${result}, ${comment.rating}`);
     })
+    csvStream.end();
     console.log(`Match in ${match} cases, total ${(match/comments.length)*100}%`);
-    console.log(`MatchNot3 in ${matchNot3} cases, total ${(matchNot3/comments.length)*100}%`);
+    console.log(`MatchNot in ${matchNot} cases, total ${(matchNot/comments.length)*100}%`);
     console.log(`diff avg: ${diffSum / comments.length}`);
     
 

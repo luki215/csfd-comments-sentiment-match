@@ -6,6 +6,7 @@
   "scripts": {
     "start:crawl": "ts-node-dev --respawn --transpileOnly ./app/crawl.ts",
     "start:sentiment": "ts-node-dev --respawn --transpileOnly ./app/sentiment.ts",
+    "start:sentiment_bayes": "ts-node-dev --respawn --transpileOnly ./app/sentiment_bayes.ts",
     "prod": "tsc && node ./build/app.js"
   },
   "devDependencies": {
@@ -18,6 +19,7 @@
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
     "fast-csv": "^4.1.1",
-    "sentiment": "^5.0.2"
+    "sentiment": "^5.0.2",
+    "ts-bayes": "^1.0.0"
   }
 }
